@@ -9,6 +9,7 @@ from decouple import config
 
 from apps.config import config_dict
 from apps import create_app, db
+from apps.mqtt_socketio import config_mqtt_socketio
 
 # WARNING: Don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
@@ -26,6 +27,7 @@ except KeyError:
 
 app = create_app(app_config)
 Migrate(app, db)
+config_mqtt_socketio(app)
 
 if DEBUG:
     app.logger.info('DEBUG       = ' + str(DEBUG))
@@ -33,4 +35,5 @@ if DEBUG:
     app.logger.info('DBMS        = ' + app_config.SQLALCHEMY_DATABASE_URI)
 
 if __name__ == "__main__":
-    app.run()
+    # app.run()
+    socketio.run(app, host='localhost', port=5005, use_reloader=True, debug=True, cors_allowed_origins="*")

@@ -1,0 +1,263 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-content">
+            <!-- [Headline icons] start -->
+            <div class="row justify-content-end">
+                <a href="/iauto_map.html" class="nav-link"><i class="feather icon-corner-down-left" style='width:20px; height:20px'></i>
+                </a>
+            </div>
+            <!-- [Headline icons] end -->
+            <!-- [Dashboard Main] start -->
+            <div class="row">
+                <!-- [live video] start -->
+                <div class="col-md-12 col-xl-6">
+                    <div class="container">
+                        <div class="form-inline">
+                            <label class="col-3 col-form-label">URL Path</label>
+                            <input type="url" class="col-6 form-control mx-sm-2 mb-2" value="office" oninput="webrtcPathCallback(this.value)">
+                            <button id="btn-stream" type="button" class="col-2 btn btn-icon btn-success mb-2">
+                                <i class="feather icon-check-circle"></i>
+                            </button>
+                        </div>
+                        <hr>
+                        <video id="video" muted playsinline controls></video>
+                    </div>
+                </div>
+                <!-- [live video] end -->
+
+                <!-- [information] start -->
+                <div class="col-md-12 col-xl-6">
+                    <div class="container">
+                        <!-- [Right 1st row] start -->
+                        <div class="row">
+                            <!-- [使用者資訊] start -->
+                            <div class="col">
+                                <h5>使用者資訊</h5>
+                                <hr>
+                                <div class="col-md-12">
+                                    <form>
+                                        <div class="form-group row">
+                                            <label class="col-5 col-form-label">車輛名稱</label>
+                                            <div class="col">
+                                                <input id="user-vehicle" type="text" readonly class="form-control-plaintext" value={{vehicle_id}}>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-5 col-form-label">使用者</label>
+                                            <div class="col">
+                                                <input id="user-name" type="text" readonly class="form-control-plaintext" value="N/A">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-5 col-form-label">起始點</label>
+                                            <div class="col">
+                                                <input id="user-from" type="text" readonly class="form-control-plaintext" value="N/A">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-5 col-form-label">目的地</label>
+                                            <div class="col">
+                                                <input id="user-to" type="text" readonly class="form-control-plaintext" value="N/A">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-5 col-form-label">人數</label>
+                                            <div class="col">
+                                                <input id="user-quantity" type="text" readonly class="form-control-plaintext" value="N/A">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- [使用者資訊] end -->
+
+                            <!-- [任務狀態] start -->
+                            <div class="col">
+                                <h5>任務狀態</h5>
+                                <hr>
+                                <div class="col-md-12">
+                                    <form>
+                                        <div class="form-group row">
+                                            <button type="button" disabled class="col btn btn-outline-dark">開始執行任務</button>
+                                            <!--
+                                            <label class="col-6 col-form-label">開始執行任務</label>
+                                            <div class="col">
+                                                <input id="task-start" type="text" readonly class="form-control-plaintext" value="????">
+                                            </div>
+                                            -->
+                                        </div>
+                                        <div class="form-group row">
+                                            <button type="button" disabled class="col btn btn-outline-dark">完成執行任務</button>
+                                            <!--
+                                            <label class="col-6 col-form-label">完成執行任務</label>
+                                            <div class="col">
+                                                <input id="task-complete" type="text" readonly class="form-control-plaintext" value="iiii">
+                                            </div>
+                                            -->
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col">
+                                                <button id="btn-task-accept" type="button" class="btn btn-primary">允許<br>派車</button>
+                                            </div>
+                                            <div class="col">
+                                                <button id="btn-task-refuse" type="button" class="btn btn-secondary">拒絕<br>派車</button>
+                                            </div>
+                                            <!--div class="col">
+                                                <input id="task-accept-dispatch" type="text" readonly class="form-control-plaintext" value="!!!!">
+                                            </div-->
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- [任務狀態] end -->
+                        </div>
+                        <!-- [Right 1st row] end -->
+
+                        <!-- [Right 2nd row] start -->
+                        <div class="row">
+                            <!-- [系統狀態] start -->
+                            <div class="col">
+                                <h5>系統狀態</h5>
+                                <hr>
+                                <div class="col-md-12">
+                                    <form>
+                                        <div class="form-group row">
+                                            <div class="col-3">
+                                                <div id="state-position" class="spinner-grow text-dark" role="status">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" readonly class="form-control-plaintext" value="定位狀態">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-3">
+                                                <div id="state-upper-middle-com" class="spinner-grow text-dark" role="status">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" readonly class="form-control-plaintext" value="上中控通訊狀態">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-3">
+                                                <div id="state-middle-lower-com" class="spinner-grow text-dark" role="status">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" readonly class="form-control-plaintext" value="中下控通訊狀態">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- [系統狀態] end -->
+
+                            <!-- [Placeholder] start -->
+                            <div class="col">
+                                <h5>Placeholder</h5>
+                                <hr>
+                                <div class="form-group row">
+                                    <label class="col-6 col-form-label">Placeholder</label>
+                                    <div class="col">
+                                        <input id="task-complete" type="text" readonly class="form-control-plaintext" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [Placeholder] end -->
+                        </div>
+                        <!-- [Right 2nd row] end -->
+
+                        <!-- [控制命令] start -->
+                        <div class="row">
+                            <div class="col">
+                                <h5>控制命令</h5>
+                                <hr>
+                                <div class="col-md-12">
+                                    <form>
+                                        <div class="form-group row">
+                                            <div class="col">
+                                                <button id="btn-active" type="button" class="btn btn-success">啟動命令</button>
+                                            </div>
+                                            <div class="col">
+                                                <button id="btn-stop" type="button" class="btn btn-danger">停止命令</button>
+                                            </div>
+                                            <div class="col">
+                                                <button id="btn-lane-change" type="button" class="btn btn-warning">車道變換命令</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- [控制命令] end -->
+                    </div>
+                </div>
+                <!-- [information] end -->
+            </div>
+            <!-- [Dashboard Main] end -->
+
+            <!-- [Event board] start -->
+            <div class="row">
+                <div class="container">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>事件通報</h5>
+                            </div>
+                            <hr>
+                            <div id="event-card" class="card-body">
+                            </div>
+                            <!--
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <div class="spinner-grow text-danger" role="status">
+                                        </div>
+                                    </div>
+                                    <label class="col">車輛因障礙物停止超過10秒</label>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <div class="spinner-grow text-danger" hidden role="status">
+                                        </div>
+                                    </div>
+                                    <label class="col">車輛因障礙物造成低於運行速度超過10秒</label>
+                                </div>
+                            </div>
+                            -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [Event board] end -->
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <!-- socket.io js -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
+    <script src="/static/assets/js/pages/socketio-monitor.js"></script>
+
+    <!-- webRTC -->
+    <!--link rel="stylesheet" type="text/css" href="/static/assets/css/plugins/webrtc-styles.css"-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/css/plugins/webrtc.css">
+    <script src="/static/assets/js/plugins/adapter.min.js" ></script>
+    <script src="/static/assets/js/plugins/webrtcstreamer.js"></script>
+    <script src="/static/assets/js/plugins/webrtchandler.js"></script>
+
+{% endblock javascripts %}

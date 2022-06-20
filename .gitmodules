@@ -1,0 +1,3 @@
+[submodule "apps/fmm"]
+	path = apps/fmm
+	url = https://github.com/cyang-kth/fmm
